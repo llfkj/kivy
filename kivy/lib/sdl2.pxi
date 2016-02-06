@@ -467,7 +467,7 @@ cdef extern from "SDL.h":
     cdef Uint32 SDL_GetTicks()
     cdef void SDL_Delay(Uint32 ms) nogil
     cdef Uint8 SDL_EventState(Uint32 type, int state)
-    cdef int SDL_PollEvent(SDL_Event * event)
+    cdef int SDL_PollEvent(SDL_Event * event) nogil
     cdef void SDL_SetEventFilter(SDL_EventFilter *filter, void* userdata)
     cdef SDL_RWops * SDL_RWFromFile(char *file, char *mode)
     cdef SDL_RWops * SDL_RWFromMem(void *mem, int size)
@@ -646,6 +646,10 @@ cdef extern from "SDL_ttf.h":
     ##define TTF_HINTING_LIGHT     1
     ##define TTF_HINTING_MONO      2
     ##define TTF_HINTING_NONE      3
+    cdef int TTF_HINTING_NORMAL
+    cdef int TTF_HINTING_LIGHT
+    cdef int TTF_HINTING_MONO
+    cdef int TTF_HINTING_NONE
     cdef int  TTF_GetFontHinting( TTF_Font *font)
     cdef void  TTF_SetFontHinting(TTF_Font *font, int hinting)
 

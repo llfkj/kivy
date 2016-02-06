@@ -264,7 +264,8 @@ class Label(Widget):
                         'halign', 'valign', 'padding_x', 'padding_y',
                         'text_size', 'shorten', 'mipmap', 'markup',
                         'line_height', 'max_lines', 'strip', 'shorten_from',
-                        'split_str', 'unicode_errors')
+                        'split_str', 'unicode_errors',
+                        'font_hinting', 'font_kerning', 'font_blended')
 
     def __init__(self, **kwargs):
         self._trigger_texture = Clock.create_trigger(self.texture_update, -1)
@@ -811,4 +812,42 @@ class Label(Widget):
 
     :attr:`strip` is a :class:`~kivy.properties.BooleanProperty` and
     defaults to False.
+    '''
+
+    font_hinting = OptionProperty(
+        'normal', options=[None, 'normal', 'light', 'mono'], allownone=True)
+    '''What hinting option to use for font rendering.
+    Can be one of `'normal'`, `'light'`, `'mono'` or None.
+
+    .. note::
+        This feature requires a SDL2 window provider.
+
+    .. versionadded:: 1.9.2
+
+    :attr:`font_hinting` is an :class:`~kivy.properties.OptionProperty` and
+    defaults to `'normal'`.
+    '''
+
+    font_kerning = BooleanProperty(True)
+    '''Whether kerning is enabled for font rendering.
+
+    .. note::
+        This feature requires a SDL2 window provider.
+
+    .. versionadded:: 1.9.2
+
+    :attr:`font_kerning` is a :class:`~kivy.properties.BooleanProperty` and
+    defaults to True.
+    '''
+
+    font_blended = BooleanProperty(True)
+    '''Whether blended or solid font rendering should be used.
+
+    .. note::
+        This feature requires a SDL2 window provider.
+
+    .. versionadded:: 1.9.2
+
+    :attr:`font_blended` is a :class:`~kivy.properties.BooleanProperty` and
+    defaults to True.
     '''

@@ -59,7 +59,34 @@ cdef class _SurfaceContainer:
         c.g = <int>(color[1] * 255)
         c.b = <int>(color[2] * 255)
         bytes_text = <bytes>text.encode('utf-8')
-        st = TTF_RenderUTF8_Blended(font, <char *>bytes_text, c)
+
+        hinting = container.options['font_hinting']
+        if hinting == 'normal':
+            if TTF_GetFontHinting(font) != TTF_HINTING_NORMAL:
+                TTF_SetFontHinting(font, TTF_HINTING_NORMAL)
+        elif hinting == 'light':
+            if TTF_GetFontHinting(font) != TTF_HINTING_LIGHT:
+                TTF_SetFontHinting(font, TTF_HINTING_LIGHT)
+        elif hinting == 'mono':
+            if TTF_GetFontHinting(font) != TTF_HINTING_MONO:
+                TTF_SetFontHinting(font, TTF_HINTING_MONO)
+        elif hinting is None:
+            if TTF_GetFontHinting(font) != TTF_HINTING_NONE:
+                TTF_SetFontHinting(font, TTF_HINTING_NONE)
+
+        kerning = container.options['font_kerning']
+        if kerning is True:
+            if TTF_GetFontKerning(font) == 0:
+                TTF_SetFontKerning(font, 1)
+        elif kerning is False:
+            if TTF_GetFontKerning(font) != 0:
+                TTF_SetFontKerning(font, 0)
+
+        st = (
+            TTF_RenderUTF8_Blended(font, <char *>bytes_text, c)
+            if container.options['font_blended']
+            else TTF_RenderUTF8_Solid(font, <char *>bytes_text, c)
+            )
         if st == NULL:
             return
         r.x = x
@@ -108,7 +135,7 @@ cdef TTF_Font *_get_font(self):
         print(s_error)
         assert(0)
 
-    # set underline and strikethrough style    
+    # set underline and strikethrough style
     style = TTF_STYLE_NORMAL
     if self.options['underline']:
         style = style | TTF_STYLE_UNDERLINE
